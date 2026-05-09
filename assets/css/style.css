@@ -247,6 +247,15 @@ article.active {
     scroll-padding-bottom: 0;
   }
 
+  /*
+   * Top navbar is position:absolute and out of flow — reserve vertical space so the first
+   * section (About) is not covered. (:first-of-type skips the preceding nav.)
+   * 顶栏绝对定位不占文档流，给首个 article 留出高度以免被遮挡。
+   */
+  .main-content--stacked > article.content-section:first-of-type {
+    margin-top: 5rem;
+  }
+
   .main-content--stacked > article.content-section {
     scroll-margin-bottom: 0;
     scroll-margin-top: 5.75rem;
@@ -367,7 +376,7 @@ main {
 
 .sidebar {
   margin-bottom: 15px;
-  max-height: 224px;
+  max-height: 336px;
   overflow: hidden;
   transition: var(--transition-2);
 }
@@ -1851,7 +1860,10 @@ textarea.form-input::-webkit-resizer { display: none; }
 
   .sidebar, article { width: auto; }
 
-  article { min-height: 100%; }
+  /* 堆叠长页：禁用「每块至少一栏高」，否则会随侧栏高度撑满整张卡片造成留白 */
+  .main-content--stacked > article.content-section {
+    min-height: unset;
+  }
 
 
 
