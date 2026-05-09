@@ -1895,11 +1895,14 @@ textarea.form-input::-webkit-resizer { display: none; }
   .sidebar {
     position: sticky;
     top: 60px;
+    align-self: flex-start;
+    flex-shrink: 0;
     max-height: max-content;
-    height: 100%;
+    height: auto;
     margin-bottom: 0;
     padding-top: 60px;
     z-index: 1;
+    overflow: visible;
   }
 
   .sidebar-info { flex-direction: column; }
@@ -1922,10 +1925,25 @@ textarea.form-input::-webkit-resizer { display: none; }
 
   .contacts-list { grid-template-columns: 1fr; }
 
+  .contact-info {
+    max-width: none;
+    width: auto;
+    min-width: 0;
+    flex: 1;
+  }
+
+  /* Email：单行省略；Location(address)：允许换行、不参与裁剪隐藏 */
   .contact-info :is(.contact-link) {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+  }
+
+  .contact-info address {
+    white-space: normal;
+    overflow: visible;
+    word-break: break-word;
+    hyphens: auto;
   }
 
   .contact-info :is(.contact-link, time, address) {
