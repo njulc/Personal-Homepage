@@ -376,12 +376,19 @@ main {
 
 .sidebar {
   margin-bottom: 15px;
-  max-height: 336px;
-  overflow: hidden;
   transition: var(--transition-2);
 }
 
-.sidebar.active { max-height: 405px; }
+/* 收起时限制高度；展开后高度随内容增长，避免大图头像 + 联系方式被裁切 */
+.sidebar:not(.active) {
+  max-height: 336px;
+  overflow: hidden;
+}
+
+.sidebar.active {
+  max-height: none;
+  overflow: visible;
+}
 
 .sidebar-info {
   position: relative;
@@ -472,13 +479,19 @@ main {
 .contact-item {
   min-width: 100%;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 16px;
+}
+
+.contact-item .icon-box {
+  flex-shrink: 0;
+  margin-top: 4px;
 }
 
 .contact-info {
   max-width: calc(100% - 46px);
   width: calc(100% - 46px);
+  min-width: 0;
 }
 
 .contact-title {
@@ -493,7 +506,21 @@ main {
   font-size: var(--fs-7);
 }
 
-.contact-info address { font-style: normal; }
+/* Long email / location — wrap instead of ellipsis so nothing is visually “cut off” */
+.contact-info .contact-link {
+  white-space: normal;
+  overflow: visible;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.contact-info address {
+  font-style: normal;
+  white-space: normal;
+  overflow: visible;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
 
 .social-list {
   display: flex;
@@ -1395,11 +1422,12 @@ textarea.form-input::-webkit-resizer { display: none; }
    */
 
   .sidebar {
-    max-height: 198px;
     margin-bottom: 30px;
   }
 
-  .sidebar.active { max-height: 584px; }
+  .sidebar:not(.active) {
+    max-height: 198px;
+  }
 
   .sidebar-info { gap: 25px; }
 
@@ -1431,6 +1459,7 @@ textarea.form-input::-webkit-resizer { display: none; }
   .contact-info {
     max-width: calc(100% - 64px);
     width: calc(100% - 64px);
+    min-width: 0;
   }
 
 
@@ -1932,19 +1961,7 @@ textarea.form-input::-webkit-resizer { display: none; }
     flex: 1;
   }
 
-  /* Email：单行省略；Location(address)：允许换行、不参与裁剪隐藏 */
-  .contact-info :is(.contact-link) {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .contact-info address {
-    white-space: normal;
-    overflow: visible;
-    word-break: break-word;
-    hyphens: auto;
-  }
+  /* Email / Location：已在全局允许换行，此处不再单行省略 */
 
   .contact-info :is(.contact-link, time, address) {
     --fs-7: 14px;
